@@ -1,18 +1,16 @@
+# Github Action
 name: Master workflow
-
 on:
-  pull_request:
-    branches:
-      - 'master'
   push:
-    branches:
-      - 'master'
+    branches: [ master ]
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2 
 
     - name: PHP Security Checker
       uses: StephaneBour/actions-php-security-checker@1.0
