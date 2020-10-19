@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+Route::get('/', [HomeController::class, 'index']);
