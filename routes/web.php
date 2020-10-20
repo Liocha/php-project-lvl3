@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\TestController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\DomainsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +17,5 @@ use App\Http\Controllers\UserController;
 
 
 Route::get('/', [HomeController::class, 'index']);
+
+Route::resource('domains', 'DomainController');
