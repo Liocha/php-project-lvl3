@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DomainsController;
+use App\Http\Controllers\DomainController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,4 +18,4 @@ use App\Http\Controllers\DomainsController;
 
 Route::get('/', [HomeController::class, 'index']);
 
-Route::resource('domains', 'DomainController');
+Route::resource('domains', DomainController::class);
