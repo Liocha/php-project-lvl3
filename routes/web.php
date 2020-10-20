@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DomainController;
 
@@ -16,6 +15,7 @@ use App\Http\Controllers\DomainController;
 */
 
 
-Route::get('/', [HomeController::class, 'index']);
-
-Route::resource('domains', DomainController::class);
+Route::get('/', [DomainController::class, 'create']);
+Route::get('domains/{id}', [DomainController::class, 'show'])->name('show');
+Route::post('domains', [DomainController::class, 'store']);
+Route::get('domains', [DomainController::class, 'index']);

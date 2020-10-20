@@ -27,6 +27,11 @@
             </div>
         </nav>
     </header>
+    @if (session('status'))
+    <div class="alert alert-success">
+        {{ session('status') }}
+    </div>
+    @endif
     @yield('content')
     <footer class="border-top py-3 mt-5">
         <div class="container-lg">
