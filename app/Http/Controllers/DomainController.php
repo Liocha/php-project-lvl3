@@ -38,12 +38,14 @@ class DomainController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'domain.name' => ['regex:/^https?:\/\/((?!-))(xn--)?[a-z0-9][a-z0-9-_]{0,61}[a-z0-9]{0,1}\.(xn--)?([a-z0-9\-]{1,61}|[a-z0-9-]{1,30}\.[a-z]{2,})$/i']
-        ], ['regex' => 'Not a valid url'])->validate();
+            'domain.name' => 'url'
+        ], ['url' => 'Not a valid url'])->validate();
 
-        $domain = $request->input('domain.name');
 
-        $id = DB::table('domains')->where('name', $domain)->value('id');
+        $url = $request->input('domain.name');
+        ['scheme' => $scheme, 'host' => $host] = parse_url($url);
+        $name = "{$scheme}://$host";
+        $id = DB::table('domains')->where('name', $name)->value('id');
 
         if (!is_null($id)) {
             return redirect()->route('show', ['id' => $id])->with('status', 'Url already exists');
@@ -51,7 +53,7 @@ class DomainController extends Controller
 
         $id = DB::table('domains')->insertGetId(
             [
-                'name' => $domain,
+                'name' => $name,
                 'created_at' => \Carbon\Carbon::now(),
                 'updated_at' => \Carbon\Carbon::now()
             ]
