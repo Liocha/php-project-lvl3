@@ -32,6 +32,7 @@
         {{ session('status') }}
     </div>
     @endif
+    @include('flash::message')
     @yield('content')
     <footer class="border-top py-3 mt-5">
         <div class="container-lg">

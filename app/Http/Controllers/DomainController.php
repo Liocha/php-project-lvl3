@@ -39,16 +39,22 @@ class DomainController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'domain.name' => 'url'
-        ], ['url' => 'Not a valid url'])->validate();
+        ]);
+
+        if ($validator->fails()) {
+            flash('Not a valid url')->error();
+            return redirect()->route('home');
+        }
 
 
         $url = $request->input('domain.name');
         ['scheme' => $scheme, 'host' => $host] = parse_url($url);
-        $name = "{$scheme}://$host";
+        $name = "{$scheme}://{$host}";
         $id = DB::table('domains')->where('name', $name)->value('id');
 
         if (!is_null($id)) {
-            return redirect()->route('show', ['id' => $id])->with('status', 'Url already exists');
+            flash('Url already exists')->warning();
+            return redirect()->route('show', ['id' => $id]);
         }
 
         $id = DB::table('domains')->insertGetId(
@@ -58,6 +64,8 @@ class DomainController extends Controller
                 'updated_at' => \Carbon\Carbon::now()
             ]
         );
+
+        flash('Url has been added')->success();
 
         return redirect()->route('show', ['id' => $id]);
     }
