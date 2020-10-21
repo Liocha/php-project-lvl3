@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <link rel="stylesheet" href="/css/app.css">
-    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
 </head>
 <body>
     <header>
@@ -26,13 +26,16 @@
                 </ul>
             </div>
         </nav>
+        <div class="class=position-relative allert-container">
+            @include('flash::message')
+        </div>
     </header>
     @if (session('status'))
     <div class="alert alert-success">
         {{ session('status') }}
     </div>
     @endif
-    @include('flash::message')
+    
     @yield('content')
     <footer class="border-top py-3 mt-5">
         <div class="container-lg">
@@ -43,7 +46,10 @@
         </div>
     </footer>
 </body>
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src="//code.jquery.com/jquery.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script>
+    let wWidth = $('body').width();
+    $('div.alert').css("position", "absolute").outerWidth(wWidth).delay(6000).fadeOut();
+</script>
 </html>

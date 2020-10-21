@@ -43,7 +43,7 @@ class DomainController extends Controller
 
         if ($validator->fails()) {
             flash('Not a valid url')->error();
-            return redirect()->route('home');
+            return redirect()->back()->withInput();
         }
 
 
