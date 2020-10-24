@@ -20,9 +20,7 @@ function addDomain($name)
 
 
 class DomainConstrollerTest extends TestCase
-{   
-
-
+{
     protected function setUp(): void
     {
         parent::setUp();
@@ -52,8 +50,7 @@ class DomainConstrollerTest extends TestCase
     }
 
     public function testStore()
-    {   
-
+    {
         $response = $this->post(route('store'), ['domain' => ['name' => 'https://testtest.ru']]);
         $response->assertRedirect();
         $this->assertDatabaseHas('domains', [
