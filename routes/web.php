@@ -16,6 +16,7 @@ use App\Http\Controllers\DomainController;
 
 
 Route::get('/', [DomainController::class, 'create'])->name('home');
+Route::post('domains/{id}/checks', [DomainController::class, 'checks'])->name('checks');
 Route::get('domains/{id}', [DomainController::class, 'show'])->name('show');
 Route::post('domains', [DomainController::class, 'store'])->name('store');
 Route::get('domains', [DomainController::class, 'index'])->name('index');

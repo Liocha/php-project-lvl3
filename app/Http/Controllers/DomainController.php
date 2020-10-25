@@ -16,7 +16,7 @@ class DomainController extends Controller
     public function index()
     {
         $domains = DB::table('domains')->get();
-        return view('pages.domains', ['domains' => $domains]);
+        return view('pages.domains.index', ['domains' => $domains]);
     }
 
     /**
@@ -77,8 +77,27 @@ class DomainController extends Controller
      */
     public function show($id)
     {
-        $data = DB::table('domains')->where('id', $id)->first();
-        return view('pages.site', ['domain' => $data]);
+        $domain = DB::table('domains')->where('id', $id)->first();
+        $checks = DB::table('domain_checks')->where('domain_id', $id)->get();
+        return view('pages.domains.show', ['domain' => $domain , 'checks' => $checks]);
+    }
+
+
+    public function checks($id)
+    {
+        $id = DB::table('domain_checks')->insertGetId(
+            [
+                'domain_id' => $id,
+                'status_code' => 777,
+                'h1' => 'h1',
+                'keywords' => 'keywords',
+                'description' => 'description',
+                'created_at' => \Carbon\Carbon::now(),
+                'updated_at' => \Carbon\Carbon::now()
+            ]
+        );
+
+        return redirect()->back();
     }
 
     /**

@@ -25,11 +25,13 @@
         </tbody></table>
     </div>
     <h2 class="mt-5 mb-3">Checks</h2>
-    <form method="post" action="#">
-        <input type="hidden" name="_token" value="">            <input type="submit" class="btn btn-primary" value="Run check">
+    <form method="post" action="{{ route('checks', ['id' => $domain->id])}}">
+        {{csrf_field()}}
+        <input type="submit" class="btn btn-primary" value="Run check">
     </form>
-                <table class="table table-bordered table-hover text-nowrap">
-            <tbody><tr>
+    <table class="table table-bordered table-hover text-nowrap">
+        <tbody>
+            <tr>
                 <th>Id</th>
                 <th>Status Code</th>
                 <th>h1</th>
@@ -37,14 +39,17 @@
                 <th>Description</th>
                 <th>Created At</th>
             </tr>
-                                <tr>
-                    <td>626</td>
-                    <td>200</td>
-                    <td></td>
-                    <td></td>
-                    <td>Яндекс - поисковая система и и...</td>
-                    <td>2020-10-20 21:06:42</td>
-                </tr>
-                        </tbody></table>
-        </div>
+            @foreach ($checks as $check)    
+            <tr>
+                <td>{{$check->id}}</td>
+                <td>{{$check->status_code}}</td>
+                <td>{{$check->h1}}</td>
+                <td>{{$check->keywords}}</td>
+                <td>{{$check->description}}</td>
+                <td>{{$check->created_at}}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
 @endsection 

@@ -10,6 +10,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
+                        <th>Last check</th>
                     </tr>
                 </thead>
                 <tbody>
