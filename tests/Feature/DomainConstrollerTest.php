@@ -57,4 +57,10 @@ class DomainConstrollerTest extends TestCase
             'name' => 'https://testtest.ru',
         ]);
     }
+
+    public function testChecks()
+    {
+        $response = $this->post(route('checks', ['id' => '1']));
+        $response->assertRedirect();
+    }
 }

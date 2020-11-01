@@ -18,6 +18,7 @@
                 <tr>
                     <td>{{$domain->id}}</td>
                     <td>{{$domain->name}}</td>
+                    <td>{{$domain->last_check}}</td>
                 </tr>
                 @endforeach
             </tbody>

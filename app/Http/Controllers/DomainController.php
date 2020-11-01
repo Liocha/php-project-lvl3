@@ -15,7 +15,13 @@ class DomainController extends Controller
      */
     public function index()
     {
-        $domains = DB::table('domains')->get();
+        $domains = DB::table('domains')
+                       ->leftJoin('domain_checks', 'domains.id', '=', 'domain_checks.domain_id')
+                       ->select('domains.id', 'domains.name', DB::raw('MAX(domain_checks.created_at) as last_check'))
+                       ->groupBy('domains.id')
+                       ->orderBy('domains.id')
+                       ->get();
+        
         return view('pages.domains.index', ['domains' => $domains]);
     }
 
