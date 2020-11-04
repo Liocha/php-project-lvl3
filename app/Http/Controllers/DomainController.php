@@ -97,7 +97,7 @@ class DomainController extends Controller
 
 
     public function checks($id)
-    {   
+    {
         $domain = DB::table('domains')->where('id', $id)->value('name');
         $response = Http::get($domain);
         $status = $response->status();
