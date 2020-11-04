@@ -11,6 +11,7 @@
                         <th>ID</th>
                         <th>Name</th>
                         <th>Last check</th>
+                        <th>Status Code</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -19,6 +20,7 @@
                     <td>{{$domain->id}}</td>
                     <td>{{$domain->name}}</td>
                     <td>{{$domain->last_check}}</td>
+                    <td>{{$domain->status_code}}</td>
                 </tr>
                 @endforeach
             </tbody>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class DomainController extends Controller
 {
@@ -15,13 +16,19 @@ class DomainController extends Controller
      */
     public function index()
     {
-        $domains = DB::table('domains')
-                       ->leftJoin('domain_checks', 'domains.id', '=', 'domain_checks.domain_id')
-                       ->select('domains.id', 'domains.name', DB::raw('MAX(domain_checks.created_at) as last_check'))
-                       ->groupBy('domains.id')
-                       ->orderBy('domains.id')
-                       ->get();
-        
+        $latestChecks = DB::table('domains')
+                            ->leftJoin('domain_checks', 'domains.id', '=', 'domain_checks.domain_id')
+                            ->select('domains.id', 'domains.name', DB::raw('MAX(domain_checks.created_at) as last_check'))
+                            ->groupBy('domains.id')
+                            ->orderBy('domains.id');
+
+        $domains = DB::table('domain_checks')
+                    ->select('latestChecks.id', 'latestChecks.name', 'latestChecks.last_check', 'domain_checks.status_code')
+                    ->RightJoinSub($latestChecks, 'latestChecks', function ($join) {
+                        $join->on('latestChecks.id', '=', 'domain_checks.domain_id')
+                                ->on('latestChecks.last_check', '=', 'domain_checks.created_at');
+                    })->get();
+
         return view('pages.domains.index', ['domains' => $domains]);
     }
 
@@ -90,11 +97,15 @@ class DomainController extends Controller
 
 
     public function checks($id)
-    {
+    {   
+        $domain = DB::table('domains')->where('id', $id)->value('name');
+        $response = Http::get($domain);
+        $status = $response->status();
+
         $id = DB::table('domain_checks')->insertGetId(
             [
                 'domain_id' => $id,
-                'status_code' => 777,
+                'status_code' => $status,
                 'h1' => 'h1',
                 'keywords' => 'keywords',
                 'description' => 'description',
