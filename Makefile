@@ -56,3 +56,6 @@ compose-db:
 
 compose-down:
 	docker-compose down -v
+
+test-coverage:
+	composer test -- --coverage-clover build/logs/clover.xml
