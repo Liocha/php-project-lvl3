@@ -26,7 +26,7 @@ class DomainController extends Controller
 
         $domains = DB::table('domain_checks')
                     ->select('latestChecks.id', 'latestChecks.name', 'latestChecks.last_check', 'domain_checks.status_code')
-                    ->RightJoinSub($latestChecks, 'latestChecks', function ($join) {
+                    ->joinSub($latestChecks, 'latestChecks', function ($join) {
                         $join->on('latestChecks.id', '=', 'domain_checks.domain_id')
                                 ->on('latestChecks.last_check', '=', 'domain_checks.created_at');
                     })->orderBy('latestChecks.id')
@@ -122,39 +122,5 @@ class DomainController extends Controller
         );
 
         return redirect()->back();
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        dd($id);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        dump($request);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        dd($id);
     }
 }

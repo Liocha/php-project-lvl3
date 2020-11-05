@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 function addDomain($name)
 {
@@ -59,7 +60,10 @@ class DomainConstrollerTest extends TestCase
     }
 
     public function testChecks()
-    {
+    {   
+        Http::fake(function ($request) {
+            return Http::response('Hello World', 200);
+        });
         $response = $this->post(route('checks', ['id' => '1']));
         $response->assertRedirect();
     }
