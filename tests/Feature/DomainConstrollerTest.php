@@ -60,7 +60,7 @@ class DomainConstrollerTest extends TestCase
     }
 
     public function testChecks()
-    {   
+    {
         Http::fake(function ($request) {
             return Http::response('Hello World', 200);
         });
