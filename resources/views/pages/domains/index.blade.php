@@ -18,7 +18,7 @@
                 @foreach ($domains as $domain)    
                 <tr>
                     <td>{{$domain->id}}</td>
-                    <td>{{$domain->name}}</td>
+                    <td><a href="{{route('show', ['id' => $domain->id])}}">{{$domain->name}}</a></td>
                     <td>{{$domain->last_check}}</td>
                     <td>{{$domain->status_code}}</td>
                 </tr>

@@ -17,11 +17,11 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{{route('home')}}">Home</a>
+                    <li class="nav-item {{ Request::path() ==  '/' ? 'active' : '' }}">
+                        <a class="nav-link" href="{{route('home')}}">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="{{route('index')}}">Domains</a>
+                    <li class="nav-item {{ Request::path() ==  'domains' ? 'active' : '' }}">
+                        <a class="nav-link" href="{{route('index')}}">Domains</a>
                     </li>
                 </ul>
             </div>

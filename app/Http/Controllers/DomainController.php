@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use DiDom\Document;
+use Illuminate\Support\Str;
 
 class DomainController extends Controller
 {
@@ -19,15 +21,16 @@ class DomainController extends Controller
         $latestChecks = DB::table('domains')
                             ->leftJoin('domain_checks', 'domains.id', '=', 'domain_checks.domain_id')
                             ->select('domains.id', 'domains.name', DB::raw('MAX(domain_checks.created_at) as last_check'))
-                            ->groupBy('domains.id')
-                            ->orderBy('domains.id');
+                            ->groupBy('domains.id');
+                            
 
         $domains = DB::table('domain_checks')
                     ->select('latestChecks.id', 'latestChecks.name', 'latestChecks.last_check', 'domain_checks.status_code')
                     ->RightJoinSub($latestChecks, 'latestChecks', function ($join) {
                         $join->on('latestChecks.id', '=', 'domain_checks.domain_id')
                                 ->on('latestChecks.last_check', '=', 'domain_checks.created_at');
-                    })->get();
+                    })->orderBy('latestChecks.id')
+                    ->get();
 
         return view('pages.domains.index', ['domains' => $domains]);
     }
@@ -101,14 +104,18 @@ class DomainController extends Controller
         $domain = DB::table('domains')->where('id', $id)->value('name');
         $response = Http::get($domain);
         $status = $response->status();
-
+        $body = $response->body();
+        $document = new Document($body);
+        $h1 = optional($document->first('h1'))->text();
+        $keywords = optional($document->first('meta[name=keywords]'))->content;
+        $description = optional($document->first('meta[name=description]'))->content;
         $id = DB::table('domain_checks')->insertGetId(
             [
                 'domain_id' => $id,
                 'status_code' => $status,
-                'h1' => 'h1',
-                'keywords' => 'keywords',
-                'description' => 'description',
+                'h1' => Str::limit($h1, 10, '...'),
+                'keywords' => Str::limit($keywords, 30, '...'),
+                'description' => Str::limit($description, 30, '...'),
                 'created_at' => \Carbon\Carbon::now(),
                 'updated_at' => \Carbon\Carbon::now()
             ]
