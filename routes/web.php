@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DomainController;
 use App\Http\Controllers\CheckController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,7 +17,7 @@ use App\Http\Controllers\CheckController;
 */
 
 
-Route::get('/', [DomainController::class, 'create'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::post('domains/{id}/checks', [CheckController::class, 'checks'])->name('checks');
 Route::get('domains/{id}', [DomainController::class, 'show'])->name('show');
 Route::post('domains', [DomainController::class, 'store'])->name('store');

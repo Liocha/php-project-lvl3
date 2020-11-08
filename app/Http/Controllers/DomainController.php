@@ -31,17 +31,7 @@ class DomainController extends Controller
                     })->orderBy('latestChecks.id')
                     ->get();
 
-        return view('pages.domains.index', ['domains' => $domains]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('pages.index');
+        return view('domains.index', ['domains' => $domains]);
     }
 
     /**
@@ -92,8 +82,11 @@ class DomainController extends Controller
      */
     public function show($id)
     {
-        $domain = DB::table('domains')->where('id', $id)->first();
+        $domain = DB::table('domains')->find($id);
+        if (is_null($domain)) {
+            abort(404);
+        }
         $checks = DB::table('domain_checks')->where('domain_id', $id)->get();
-        return view('pages.domains.show', ['domain' => $domain , 'checks' => $checks]);
+        return view('domains.show', ['domain' => $domain , 'checks' => $checks]);
     }
 }

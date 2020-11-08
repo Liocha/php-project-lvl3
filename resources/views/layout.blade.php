@@ -1,3 +1,6 @@
+@php
+$currentRouteName = Request::route()->getName();
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,10 +20,10 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item {{ Request::path() ==  '/' ? 'active' : '' }}">
+                    <li class="nav-item {{ Helper::getActivClass($currentRouteName, 'home') }}">
                         <a class="nav-link" href="{{route('home')}}">Home</a>
                     </li>
-                    <li class="nav-item {{ Request::path() ==  'domains' ? 'active' : '' }}">
+                    <li class="nav-item {{ Helper::getActivClass($currentRouteName, 'index') }}">
                         <a class="nav-link" href="{{route('index')}}">Domains</a>
                     </li>
                 </ul>

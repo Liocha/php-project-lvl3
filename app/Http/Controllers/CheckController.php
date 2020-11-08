@@ -6,13 +6,23 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use DiDom\Document;
 use Illuminate\Support\Str;
+use Illuminate\Http\Client\ConnectionException;
 
 class CheckController extends Controller
 {
     public function checks($id)
     {
-        $domain = DB::table('domains')->where('id', $id)->value('name');
-        $response = Http::get($domain);
+        $domainName = DB::table('domains')->where('id', $id)->value('name');
+        if (is_null($domainName)) {
+            abort(404);
+        }
+
+        try {
+            $response = Http::get($domainName);
+        } catch (ConnectionException $e) {
+            flash($e->getMessage())->error();
+            return redirect()->back();
+        }
         $status = $response->status();
         $body = $response->body();
         $document = new Document($body);
