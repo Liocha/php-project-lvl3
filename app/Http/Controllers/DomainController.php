@@ -17,21 +17,21 @@ class DomainController extends Controller
      */
     public function index()
     {
-        $latestChecks = DB::table('domains')
-                            ->leftJoin('domain_checks', 'domains.id', '=', 'domain_checks.domain_id')
-                            ->select('domains.id', 'domains.name', DB::raw('MAX(domain_checks.created_at) as last_check'))
-                            ->groupBy('domains.id');
-                            
-
-        $domains = DB::table('domain_checks')
-                    ->select('latestChecks.id', 'latestChecks.name', 'latestChecks.last_check', 'domain_checks.status_code')
-                    ->joinSub($latestChecks, 'latestChecks', function ($join) {
-                        $join->on('latestChecks.id', '=', 'domain_checks.domain_id')
-                                ->on('latestChecks.last_check', '=', 'domain_checks.created_at');
-                    })->orderBy('latestChecks.id')
+        $domains = DB::table('domains')
+                    ->select('name', 'id')
                     ->get();
 
-        return view('domains.index', ['domains' => $domains]);
+        $latestChecks = DB::table('domain_checks')
+                            ->select('domain_id', 'created_at', 'status_code')
+                            ->whereIn('id', function ($query) {
+                                $query->select(DB::raw('MAX(id)'))
+                                    ->from('domain_checks')
+                                    ->groupBy('domain_id');
+                            })
+                            ->orderBy('domain_id')
+                            ->get();
+        
+        return view('domains.index', ['domains' => $domains], ['latestChecks' => $latestChecks->keyBy('domain_id')]);
     }
 
     /**
@@ -50,7 +50,6 @@ class DomainController extends Controller
             flash('Not a valid url')->error();
             return redirect()->back()->withInput();
         }
-
 
         $url = $request->input('domain.name');
         ['scheme' => $scheme, 'host' => $host] = parse_url($url);
