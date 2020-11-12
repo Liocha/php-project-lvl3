@@ -20,7 +20,7 @@ function addDomain($name)
 }
 
 
-class DomainConstrollerTest extends TestCase
+class DomainControllerTest extends TestCase
 {
     protected function setUp(): void
     {

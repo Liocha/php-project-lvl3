@@ -8,7 +8,7 @@ use DiDom\Document;
 use Illuminate\Support\Str;
 use Illuminate\Http\Client\ConnectionException;
 
-class CheckController extends Controller
+class DomainCheckController extends Controller
 {
     public function checks($id)
     {
