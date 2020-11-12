@@ -22,9 +22,14 @@ function addDomain($name)
 
 class DomainControllerTest extends TestCase
 {
+    private $domainName;
+
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->domainName = 'https://testtest.ru';
+
         $domains = ['https://test1.ru', 'http://test2.com', 'https://test3.pro'];
 
         foreach ($domains as $domain) {
@@ -52,19 +57,12 @@ class DomainControllerTest extends TestCase
 
     public function testStore()
     {
-        $response = $this->post(route('store'), ['domain' => ['name' => 'https://testtest.ru']]);
-        $response->assertRedirect();
-        $this->assertDatabaseHas('domains', [
-            'name' => 'https://testtest.ru',
-        ]);
-    }
+        $response = $this->post(route('store'), ['domain' => ['name' => $this->domainName]]);
 
-    public function testChecks()
-    {
-        Http::fake(function ($request) {
-            return Http::response('Hello World', 200);
-        });
-        $response = $this->post(route('checks', ['id' => '1']));
+        $this->assertDatabaseHas('domains', [
+            'name' => $this->domainName,
+        ]);
+        $response->assertSessionHasNoErrors();
         $response->assertRedirect();
     }
 }

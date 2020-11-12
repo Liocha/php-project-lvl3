@@ -63,7 +63,7 @@ class DomainCheckControllerTest extends TestCase
         $expectedValues = getTags($content);
 
         $this->assertDatabaseHas('domain_checks', $expectedValues);
-        
+        $response->assertSessionHasNoErrors();
         $response->assertRedirect();
     }
 }
