@@ -40,6 +40,6 @@ class DomainCheckController extends Controller
         } catch (RequestException | ConnectionException $e) {
             flash("Данный домен {$domainName} не может быть проверен")->error();
         }
-          return redirect()->back();
+        return redirect()->back();
     }
 }
