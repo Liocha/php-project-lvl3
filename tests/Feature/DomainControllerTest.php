@@ -2,39 +2,29 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
-
-function addDomain($name)
-{
-    $id = DB::table('domains')->insertGetId(
-        [
-            'name' => $name,
-            'created_at' => \Carbon\Carbon::now(),
-            'updated_at' => \Carbon\Carbon::now()
-        ]
-    );
-    return $id;
-}
-
 
 class DomainControllerTest extends TestCase
 {
     private $domainName;
+    private $domainId;
+    private $secondDomainName;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->domainName = 'https://testtest.ru';
+        $this->domainName = 'https://test.ru';
+        $this->secondDomainName = 'https://hexlet.io';
 
-        $domains = ['https://test1.ru', 'http://test2.com', 'https://test3.pro'];
-
-        foreach ($domains as $domain) {
-            addDomain($domain);
-        }
+        $this->domainId = DB::table('domains')->insertGetId(
+            [
+                'name' => $this->domainName,
+                'created_at' => \Carbon\Carbon::now(),
+                'updated_at' => \Carbon\Carbon::now()
+            ]
+        );
     }
 
     public function testHome()
@@ -51,17 +41,32 @@ class DomainControllerTest extends TestCase
 
     public function testShow()
     {
-        $response = $this->get(route('show', ['id' => '1']));
+        $response = $this->get(route('show', ['id' => $this->domainId]));
         $response->assertOk();
+        $response->assertSee($this->domainName);
     }
 
     public function testStore()
+    {
+        $response = $this->post(route('store'), ['domain' => ['name' => $this->secondDomainName]]);
+
+        $this->assertDatabaseHas('domains', [
+            'name' => $this->secondDomainName,
+        ]);
+        $response->assertSessionHasNoErrors();
+        $response->assertRedirect();
+    }
+
+    public function testStoreIfDomainAlreadyExist()
     {
         $response = $this->post(route('store'), ['domain' => ['name' => $this->domainName]]);
 
         $this->assertDatabaseHas('domains', [
             'name' => $this->domainName,
         ]);
+
+        $this->assertDatabaseCount('domains', 1);
+
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
     }

@@ -14,9 +14,8 @@ class DomainCheckController extends Controller
     public function checks($id)
     {
         $domainName = DB::table('domains')->where('id', $id)->value('name');
-        if (is_null($domainName)) {
-            abort(404);
-        }
+
+        abort_unless($domainName, 404);
 
         try {
             $response = Http::get($domainName);
@@ -40,8 +39,7 @@ class DomainCheckController extends Controller
             flash("Website has been checked!")->success();
         } catch (RequestException | ConnectionException $e) {
             flash("Данный домен {$domainName} не может быть проверен")->error();
-        } finally {
-            return redirect()->back();
         }
+          return redirect()->back();
     }
 }

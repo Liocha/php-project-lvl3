@@ -52,22 +52,22 @@ class DomainController extends Controller
         $url = $request->input('domain.name');
         ['scheme' => $scheme, 'host' => $host] = parse_url($url);
         $name = "{$scheme}://{$host}";
-        $id = DB::table('domains')->where('name', $name)->value('id');
 
-        if (!is_null($id)) {
+        $domain = DB::table('domains')->where('name', $name)->first();
+        
+        if (!is_null($domain)) {
+            $id = $domain->id;
             flash('Url already exists')->warning();
-            return redirect()->route('show', ['id' => $id]);
+        } else {
+            $id = DB::table('domains')->insertGetId(
+                [
+                    'name' => $name,
+                    'created_at' => \Carbon\Carbon::now(),
+                    'updated_at' => \Carbon\Carbon::now()
+                ]
+            );
+            flash('Url has been added')->success();
         }
-
-        $id = DB::table('domains')->insertGetId(
-            [
-                'name' => $name,
-                'created_at' => \Carbon\Carbon::now(),
-                'updated_at' => \Carbon\Carbon::now()
-            ]
-        );
-
-        flash('Url has been added')->success();
 
         return redirect()->route('show', ['id' => $id]);
     }
@@ -80,7 +80,7 @@ class DomainController extends Controller
     public function show($id)
     {
         $domain = DB::table('domains')->find($id);
-        abort_if(is_null($domain), 403);
+        abort_if(is_null($domain), 404);
 
         $checks = DB::table('domain_checks')->where('domain_id', $id)->get();
 
