@@ -38,9 +38,9 @@ class DomainCheckControllerTest extends TestCase
         $status = 200;
         $headers = ['Content-Type' => 'text/html'];
         $expectedValues  = [
-            "h1" => " Это тесто...",
-            "keywords" => "новости, новости сегодня, ново...",
-            "description" => "Рамблер — медийный портал. Пои...",
+            "h1" => "Это тестовая страница для HTTP FAKER",
+            "keywords" => "новости, новости сегодня, новости сейчас, медийный портал",
+            "description" => "В наше время люди узнают о том, что они думают, по телевизору.",
         ];
 
         Http::fake(function ($request) use ($content, $status, $headers) {

@@ -43,9 +43,9 @@
             <tr>
                 <td>{{$check->id}}</td>
                 <td>{{$check->status_code}}</td>
-                <td>{{$check->h1}}</td>
-                <td>{{$check->keywords}}</td>
-                <td>{{$check->description}}</td>
+                <td>{{Str::limit($check->h1, 10, '...')}}</td>
+                <td>{{Str::limit($check->keywords, 30, '...')}}</td>
+                <td>{{Str::limit($check->description, 30, '...')}}</td>
                 <td>{{$check->created_at}}</td>
             </tr>
             @endforeach

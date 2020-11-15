@@ -29,9 +29,9 @@ class DomainCheckController extends Controller
                 [
                     'domain_id' => $id,
                     'status_code' => $status,
-                    'h1' => Str::limit($h1, 10, '...'),
-                    'keywords' => Str::limit($keywords, 30, '...'),
-                    'description' => Str::limit($description, 30, '...'),
+                    'h1' => $h1,
+                    'keywords' => $keywords,
+                    'description' => $description,
                     'created_at' => \Carbon\Carbon::now(),
                     'updated_at' => \Carbon\Carbon::now()
                 ]
